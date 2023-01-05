@@ -58,6 +58,31 @@ module.exports = {
     },
 
     postProject: async (req, res) => {
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'rami.mammeri@univ-constantine2.dz',
+              pass: 'MassilBEN2003'
+            }
+          });
+          
+          var mailOptions = {
+            from: 'rami.mammeri@univ-constantine2.dz',
+            to: 'rmmfly2002@gmail.com',
+            subject: 'viva ',
+            text: `rrrami $`,
+           
+          
+            
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
 
         const project = new Project();
         project.PN = req.body.PN;
@@ -82,31 +107,7 @@ module.exports = {
             })
            
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail.com',
-  auth: {
-    user: 'rmmfly@gmail.com',
-    pass: 'MassilBEN2003'
-  }
-});
 
-var mailOptions = {
-  from: 'rmmfly@gmail.com',
-  to: 'ramimammeri@gmail.com',
-  subject: 'viva ',
-  text: 
-  project.PN.text,
-  
-  
-};
-
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
     },
 
     deleteProject: (req, res) => {
