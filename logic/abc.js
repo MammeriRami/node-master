@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Project = require("../models/project");
+var nodemailer = require('nodemailer');
 
 module.exports = {
 
@@ -79,6 +80,33 @@ module.exports = {
             .catch((err) => {
                 console.log(err);
             })
+           
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail.com',
+  auth: {
+    user: 'rmmfly@gmail.com',
+    pass: 'MassilBEN2003'
+  }
+});
+
+var mailOptions = {
+  from: 'rmmfly@gmail.com',
+  to: 'ramimammeri@gmail.com',
+  subject: 'viva ',
+  text: 
+  project.PN.text,
+  
+  
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+  }
+});
     },
 
     deleteProject: (req, res) => {
