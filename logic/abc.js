@@ -1,6 +1,21 @@
 const mongoose = require('mongoose');
 const Project = require("../models/project");
 var nodemailer = require('nodemailer');
+let ejs = require('ejs');
+let pdf = require('html-pdf');
+let path = require('node:path');
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'rami.mammeri@univ-constantine2.dz',
+        pass: 'MassilBEN2003'
+    }
+});
+
+let Options = {
+   
+};
+
 
 module.exports = {
 
@@ -15,8 +30,9 @@ module.exports = {
                             pn: res.PN,
                             y: res.Y,
                             fs: res.FS,
+                            fe: res.FE,
                             ss: res.SS,
-                            ts: res.TS,
+                            se: res.SE,
                             sv: res.SV.FN,
                             pr: res.PR.FN,
                             ex: res.EX.FN,
@@ -42,8 +58,9 @@ module.exports = {
                         pn: result.PN,
                         y: result.Y,
                         fs: result.FS,
+                        fe: result.SS,
                         ss: result.SS,
-                        ts: result.TS,
+                        se: result.SS,
                         viva: result.VIVA,
 
                         id: result._id
@@ -58,31 +75,10 @@ module.exports = {
     },
 
     postProject: async (req, res) => {
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: 'rami.mammeri@univ-constantine2.dz',
-              pass: 'MassilBEN2003'
-            }
-          });
-          
-          var mailOptions = {
-            from: 'rami.mammeri@univ-constantine2.dz',
-            to: 'rmmfly2002@gmail.com',
-            subject: 'viva ',
-            text: `rrrami $`,
-           
-          
-            
-          };
-          
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-          });
+       
+        
+    
+
 
         const project = new Project();
         project.PN = req.body.PN;
@@ -100,12 +96,50 @@ module.exports = {
 
         await project.save()
             .then((result) => {
-                res.send("cbn");
+                ejs.renderFile(
+                    path.join("./view/", "rami4.ejs"),{
+                        viva:result,
+                    },
+                    (err, data) => {
+                        if (err) {
+                            res.send("first");
+                        } else {
+                            pdf.create(data, Options).toFile("VIVA.pdf", function (err, data) {
+                                if (err) {
+                                    res.send("SECOND");
+                                } else {
+                                    var mailOptions = {
+                                        from: 'rami.mammeri@univ-constantine2.dz',
+                                        to: 'rmmfly2002@gmail.com',
+                                        subject: 'viva ',
+                                        text: `hii `+result.FS+result.SS+result.TS+ `We are sending you this email to inform you about the last desision concerning your project :`+result.PN+`
+                                        and you got the following mark `+result.SV.MARK+` `+ result.PR.MARK+ ` ` + result.EX.MARK+` and for the viva you got this `+ result.VIVA,
+                                        attachments: [
+                                            {
+                                                path: data.filename
+                                            },                                          
+                                        ],                                     
+                                    };
+                                    transporter.sendMail(mailOptions, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                            res.send("let")
+                                        } else {
+                                            res.send("cbn");
+                                            console.log('Email sent: ' + info.response);
+                                        }
+                                    });
+  
+                                }
+                            });
+                        }
+                    });                  
             })
             .catch((err) => {
                 console.log(err);
             })
-           
+
+        
 
 
     },
