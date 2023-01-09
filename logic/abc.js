@@ -33,6 +33,8 @@ module.exports = {
                             fe: res.FE,
                             ss: res.SS,
                             se: res.SE,
+                            ts: res.TS,
+                            te: res.TE,
                             sv: res.SV.FN,
                             pr: res.PR.FN,
                             ex: res.EX.FN,
@@ -58,9 +60,11 @@ module.exports = {
                         pn: result.PN,
                         y: result.Y,
                         fs: result.FS,
-                        fe: result.SS,
+                        fe: result.FS,
                         ss: result.SS,
-                        se: result.SS,
+                        se: result.SE,
+                        ts: result.TS,
+                        te: result.TE,
                         viva: result.VIVA,
 
                         id: result._id
@@ -84,8 +88,11 @@ module.exports = {
         project.PN = req.body.PN;
         project.Y = req.body.Y;
         project.FS = req.body.FS;
+        project.FE = req.body.FE;
         project.SS = req.body.SS;
+        project.SE = req.body.SE;
         project.TS = req.body.TS;
+        project.TE = req.body.TE;
         project.SV.FN = req.body.SVN;
         project.PR.FN = req.body.PRN;
         project.EX.FN = req.body.EXN;
@@ -97,8 +104,8 @@ module.exports = {
         await project.save()
             .then((result) => {
                 ejs.renderFile(
-                    path.join("./view/", "rami4.ejs"),{
-                        viva:result,
+                    path.join("./view/", "rami3.ejs"),{
+                        user:result,
                     },
                     (err, data) => {
                         if (err) {
@@ -108,11 +115,12 @@ module.exports = {
                                 if (err) {
                                     res.send("SECOND");
                                 } else {
-                                    var mailOptions = {
+                                    var mailOptions1 = {
                                         from: 'rami.mammeri@univ-constantine2.dz',
-                                        to: 'rmmfly2002@gmail.com',
+                                        to: result.FE,                                       
+                                        
                                         subject: 'viva ',
-                                        text: `hii `+result.FS+result.SS+result.TS+ `We are sending you this email to inform you about the last desision concerning your project :`+result.PN+`
+                                        text: `hii `+result.FS+ `We are sending you this email to inform you about the last desision concerning your project :`+result.PN+`
                                         and you got the following mark `+result.SV.MARK+` `+ result.PR.MARK+ ` ` + result.EX.MARK+` and for the viva you got this `+ result.VIVA,
                                         attachments: [
                                             {
@@ -120,15 +128,64 @@ module.exports = {
                                             },                                          
                                         ],                                     
                                     };
-                                    transporter.sendMail(mailOptions, function (error, info) {
+                                    transporter.sendMail(mailOptions1, function (error, info) {
                                         if (error) {
                                             console.log(error);
-                                            res.send("let")
+                                            res.send(result.FE)
                                         } else {
                                             res.send("cbn");
                                             console.log('Email sent: ' + info.response);
                                         }
+                                    
                                     });
+                                    var mailOptions2 = {
+                                        from: 'rami.mammeri@univ-constantine2.dz',
+                                        to:result.SE,
+                                        
+                                        subject: 'viva ',
+                                        text: `hii `+result.SS+ `We are sending you this email to inform you about the last desision concerning your project :`+result.PN+`
+                                        and you got the following mark `+result.SV.MARK+` `+ result.PR.MARK+ ` ` + result.EX.MARK+` and for the viva you got this `+ result.VIVA,
+                                        attachments: [
+                                            {
+                                                path: data.filename
+                                            },                                          
+                                        ],                                     
+                                    };
+                                    transporter.sendMail(mailOptions2, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                            res.send(9ble cbn)
+                                        } else {
+                                            res.send("cbn");
+                                            console.log('Email sent: ' + info.response);
+                                        }
+                                    
+                                    });
+                                    var mailOptions3 = {
+                                        from: 'rami.mammeri@univ-constantine2.dz',
+                                        
+                                        to:result.TE,
+                                        
+                                        subject: 'viva ',
+                                        text: `hii `+result.TS+ `We are sending you this email to inform you about the last desision concerning your project :`+result.PN+`
+                                        and you got the following mark `+result.SV.MARK+` `+ result.PR.MARK+ ` ` + result.EX.MARK+` and for the viva you got this `+ result.VIVA,
+                                        attachments: [
+                                            {
+                                                path: data.filename
+                                            },                                          
+                                        ],                                     
+                                    };
+                                    transporter.sendMail(mailOptions3, function (error, info) {
+                                        if (error) {
+                                            console.log(error);
+                                            res.send(result.FE)
+                                        } else {
+                                            res.send("cbn");
+                                            console.log('Email sent: ' + info.response);
+                                        }
+                                    
+                                    });
+
   
                                 }
                             });
