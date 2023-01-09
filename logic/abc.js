@@ -178,7 +178,7 @@ module.exports = {
                                     transporter.sendMail(mailOptions3, function (error, info) {
                                         if (error) {
                                             console.log(error);
-                                            res.send("9ble cbn")
+                                            res.send("9bl cbn")
                                         } else {
                                             res.send("cbn");
                                             console.log('Email sent: ' + info.response);
