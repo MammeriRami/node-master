@@ -13,6 +13,8 @@ const project = new Schema(  {
     FE: String,
     SS: String,
     SE: String,
+    TS: String,
+    TE: String,
     SV: { FN:String , MARK:Number},
     PR: { FN:String , MARK:Number},
     EX: { FN:String , MARK:Number},
