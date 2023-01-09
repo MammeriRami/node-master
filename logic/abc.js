@@ -104,7 +104,7 @@ module.exports = {
         await project.save()
             .then((result) => {
                 ejs.renderFile(
-                    path.join("./view/", "rami3.ejs"),{
+                    path.join("./view/", "pdfG.ejs"),{
                         user:result,
                     },
                     (err, data) => {
